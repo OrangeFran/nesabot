@@ -1,0 +1,4 @@
+cache
+src/creds.py
+__pycache__
+venv
