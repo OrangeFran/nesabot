@@ -9,7 +9,7 @@ Group=www-data
 Type=simple
 Restart=always
 RestartSec=5s
-ExecStart=/var/www/nesabot/src/main.py
+ExecStart=/var/www/nesabot/venv/bin/python3 /var/www/nesabot/src/main.py 10
 
 [Install]
 WantedBy=multi-user.target

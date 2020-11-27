@@ -5,7 +5,17 @@ Actual code to visit, login and retrive the current grades.
 import requests, json
 from bs4 import BeautifulSoup
 from const import URL
-from creds import UNAME, PASSWD
+from creds import UNAME, PASSWD, MY_CHAT_ID
+
+filename = "/var/www/nesabot/cache/grades.json"
+
+def read_json():
+    with open(filename, "r") as f:
+        return json.loads(f.read())
+
+def write_json(j: str):
+    with open(filename, "w") as f:
+        json.dump(j, f)
 
 def fmt(json, new: bool) -> str:
     output = "New grades ... 😄\n" if new else ""
@@ -16,23 +26,22 @@ def fmt(json, new: bool) -> str:
 # Data will be stored as json
 def fetch(cached: bool, bot = None):
     # Try to load "cached" json if avaible
-    with open("./cache/grades.json", "r") as f:
-        cached_str = f.read()
+    cached_json = read_json()
     if cached:
-        return fmt(json.loads(cached_str), new = False)
+        return fmt(cached_json, new = False)
     # Fetch new grades (if avaible) and write to cache for future ref
     j = extract_grades(login(UNAME, PASSWD))
-    if cached_str == "":
-        with open("./cache/grades.json", "w") as f:
-            json.dump(j, f)
-    else:
-        cached_json = json.loads(cached_str)
+    write_json(j)
+    if len(cached_json) == 0:
         # Compare with old one
         if cached_json != j:
             new_entries = []
-            for c in cached_json:
-                if c == j[0]:
-                    break
+            for c in j:
+                try:
+                    if c == cached_json[0]:
+                        break
+                except:
+                    pass
                 new_entries.append(c)
             if bot != None:
                 bot.send_message(

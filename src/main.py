@@ -5,7 +5,7 @@ A simple bot that queries the site ksbg.nesa-sg.ch for grades
 and displays them in a nice way to me.
 '''
 
-import threading, time, logging
+import threading, time, logging, sys
 from telegram import Bot
 from telegram.ext import Updater, CommandHandler
 
@@ -43,6 +43,7 @@ def cmd_fetch(update, context):
     update.message.reply_text(text = fetch(False))
 
 if __name__ == "__main__":
+    # Start the bot
     bot = Bot(TOKEN)
     updater = Updater(TOKEN, use_context = True)
     dp = updater.dispatcher
@@ -50,11 +51,14 @@ if __name__ == "__main__":
     dp.add_handler(CommandHandler("start", cmd_help))
     dp.add_handler(CommandHandler("grades", cmd_grades))
     dp.add_handler(CommandHandler("fetch", cmd_fetch))
-    # Start the bot
     updater.start_polling()
-    # updater.idle()
+
     # Start background fetching every x minutes
-    thread = threading.Thread(target = bg_fetching, args = (bot, 30,))
+    if len(sys.argv) == 1:
+        timeout = 30
+    else:
+        timeout = int(sys.argv[1])  
+    thread = threading.Thread(target = bg_fetching, args = (bot, timeout, ))
     thread.start()
     thread.join()
 
