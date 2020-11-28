@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker build -v "$(pwd)/src":/nesabot/src local/nesabot
+docker build -t local/nesabot -f "$(pwd)/dockerfile" "$(pwd)" 
