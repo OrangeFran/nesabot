@@ -9,7 +9,7 @@ Group=web
 Type=simple
 Restart=always
 RestartSec=5s
-ExecStart=/var/www/nesabot/start.sh
+ExecStart=/var/www/nesabot/scripts/start.sh
 
 [Install]
 WantedBy=multi-user.target
