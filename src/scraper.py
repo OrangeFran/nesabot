@@ -11,7 +11,8 @@ filename = "/var/www/nesabot/cache/grades.json"
 
 def read_json():
     with open(filename, "r") as f:
-        return json.loads(f.read())
+        txt = f.read()
+        return json.loads(txt) if txt != None else None
 
 def write_json(j: str):
     with open(filename, "w") as f:

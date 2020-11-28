@@ -29,11 +29,10 @@ echo "PASSWD = \"$password\"" >> $creds_file
 echo "TOKEN = \"$bot_token\"" >> $creds_file
 echo "MY_CHAT_ID = $chat_id" >> $creds_file 
 
-mkdir $root_path/nesabot/cache
-touch $root_path/nesabot/cache/grades.json
-
 sudo chown -R web:www-data $root_path/nesabot
 sudo cp $root_path/nesabot/nesabot.service /etc/systemd/system
+
+docker build -t local/nesabot -f $root_path/dockerfile $root_path
 
 sudo systemctl daemon-reload
 sudo systemctl start nesabot.service
