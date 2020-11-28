@@ -32,7 +32,9 @@ echo "MY_CHAT_ID = $chat_id" >> $creds_file
 sudo chown -R web:www-data $root_path/nesabot
 sudo cp $root_path/nesabot/nesabot.service /etc/systemd/system
 
+echo "Building docker file with name 'local/nesabot' ..."
 docker build -t local/nesabot -f $root_path/dockerfile $root_path
 
+echo "Starting systemctl service 'nesabot' ..."
 sudo systemctl daemon-reload
 sudo systemctl start nesabot.service
