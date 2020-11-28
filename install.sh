@@ -10,14 +10,11 @@ if [ "$REPLY" != "y" ]; then
     exit 1
 fi
 
-sudo rm -rf $root_path
-
 get() {
     echo -n "$1: "
     read $1
 }
 
-sudo cp -r $HOME/nesabot $root_path
 sudo chown -R web:www-data $root_path
 
 # Create the creds file (if needed)
