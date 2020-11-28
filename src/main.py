@@ -52,7 +52,6 @@ if __name__ == "__main__":
     dp.add_handler(CommandHandler("grades", cmd_grades))
     dp.add_handler(CommandHandler("fetch", cmd_fetch))
     updater.start_polling()
-
     # Start background fetching every x minutes
     if len(sys.argv) == 1:
         timeout = 30

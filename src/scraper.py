@@ -24,7 +24,7 @@ def fmt(json, new: bool) -> str:
     output = "New grades ... 😄\n" if new else ""
     for g in json:
         output += "{} at {}: \t{}\n".format(g["name"], g["date"], g["grade"])
-    return output
+    return output if output != "" else "Nothing"
 
 # Data will be stored as json
 def fetch(cached: bool, bot = None):
