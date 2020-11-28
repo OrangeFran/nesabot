@@ -3,7 +3,7 @@ FROM python:3
 RUN mkdir -p /nesabot
 WORKDIR /nesabot
 
-ADD ./requirements.txt . 
+ADD ./integration/requirements.txt .
 
 RUN mkdir cache && touch cache/grades.json 
 

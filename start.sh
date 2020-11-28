@@ -1,3 +1,2 @@
 #!/bin/bash
-
-docker run -v "$(pwd)":/nesabot local/nesabot
+docker run -v "/var/www/nesabot/src":/nesabot/src local/nesabot

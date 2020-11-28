@@ -4,8 +4,8 @@ Wants=network.target
 After=syslog.target network-online.target
 
 [Service]
-User=www-data
-Group=www-data
+User=web
+Group=web
 Type=simple
 Restart=always
 RestartSec=5s

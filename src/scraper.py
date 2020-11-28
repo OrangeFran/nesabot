@@ -7,16 +7,18 @@ from bs4 import BeautifulSoup
 from const import URL
 from creds import UNAME, PASSWD, MY_CHAT_ID
 
-filename = "/var/www/nesabot/cache/grades.json"
+filename = "/nesabot/cache/grades.json"
 
 def read_json():
     with open(filename, "r") as f:
         txt = f.read()
-        return json.loads(txt) if txt != None else None
+        if txt == "":
+            return []
+        return json.loads(txt)
 
 def write_json(j: str):
     with open(filename, "w") as f:
-        json.dump(j, f)
+        if j != None: json.dump(j, f)
 
 def fmt(json, new: bool) -> str:
     output = "New grades ... 😄\n" if new else ""
@@ -33,23 +35,22 @@ def fetch(cached: bool, bot = None):
     # Fetch new grades (if avaible) and write to cache for future ref
     j = extract_grades(login(UNAME, PASSWD))
     write_json(j)
-    if len(cached_json) == 0:
-        # Compare with old one
-        if cached_json != j:
-            new_entries = []
-            for c in j:
-                try:
-                    if c == cached_json[0]:
-                        break
-                except:
-                    pass
-                new_entries.append(c)
-            if bot != None:
-                bot.send_message(
-                    chat_id = MY_CHAT_ID,
-                    text = fmt(new_entries, new = True)
-                )
-            return fmt(new_entries, new = True)
+    # Compare with old one
+    if len(cached_json) != len(j):
+        new_entries = []
+        for c in j:
+            try:
+                if c == cached_json[0]:
+                    break
+            except:
+                pass
+            new_entries.append(c)
+        if bot != None:
+            bot.send_message(
+                chat_id = MY_CHAT_ID,
+                text = fmt(new_entries, new = True)
+            )
+        return fmt(new_entries, new = True)
     return fmt(j, new = False)
 
 # Log into the site and return the a soup of the landing page
