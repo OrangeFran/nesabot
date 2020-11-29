@@ -4,6 +4,7 @@ root_path="/var/www/nesabot"
 
 echo -n "Using the root_path $root_path, continue? (y/n) " && read REPLY
 if [[ "$REPLY" =~ (y|Y|yes|Yes) ]]; then
+    ssh server "bash -s" < "$(pwd)/scripts/check_and_stop.sh"
     ssh server "bash -s" < "$(pwd)/scripts/set_permissions.sh"
 
     scp -r "$(pwd)/src" server:$root_path/src

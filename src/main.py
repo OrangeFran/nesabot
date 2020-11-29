@@ -52,12 +52,8 @@ if __name__ == "__main__":
     dp.add_handler(CommandHandler("grades", cmd_grades))
     dp.add_handler(CommandHandler("fetch", cmd_fetch))
     updater.start_polling()
-    # Start background fetching every x minutes
-    if len(sys.argv) == 1:
-        timeout = 30
-    else:
-        timeout = int(sys.argv[1])  
-    thread = threading.Thread(target = bg_fetching, args = (bot, timeout, ))
+    # Start fetching grades in the background
+    thread = threading.Thread(target = bg_fetching, args = (bot, 10, ))
     thread.start()
     thread.join()
 

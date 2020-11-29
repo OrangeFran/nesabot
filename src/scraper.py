@@ -23,7 +23,7 @@ def write_json(j: str):
 def fmt(json, new: bool) -> str:
     output = "New grades ... 😄\n" if new else ""
     for g in json:
-        output += "{} at {}: \t{}\n".format(g["name"], g["date"], g["grade"])
+        output += "{} ({}) at {}: \t{}\n".format(g["name"], g["subject"], g["date"], g["grade"])
     return output if output != "" else "Nothing"
 
 # Data will be stored as json
@@ -33,18 +33,14 @@ def fetch(cached: bool, bot = None):
     if cached:
         return fmt(cached_json, new = False)
     # Fetch new grades (if avaible) and write to cache for future ref
-    j = extract_grades(login(UNAME, PASSWD))
-    write_json(j)
+    new_json = extract_grades(login(UNAME, PASSWD))
+    write_json(new_json)
     # Compare with old one
-    if len(cached_json) != len(j):
+    if len(cached_json) != len(new_json):
         new_entries = []
-        for c in j:
-            try:
-                if c == cached_json[0]:
-                    break
-            except:
-                pass
-            new_entries.append(c)
+        for c in new_json:
+            if c not in cached_json:
+                new_entries.append(c)
         if bot != None:
             bot.send_message(
                 chat_id = MY_CHAT_ID,
@@ -76,11 +72,13 @@ def extract_grades(soup: BeautifulSoup):
     grades = []
     for tr in soup.select("tr.mdl-table--row-dense")[8:]:
         c = list(filter(lambda x: x != "\n", tr.contents))
-        name, date, grade = (c[0].string, c[2].string, c[3].string)
+        subject, name, date, grade = (c[0].string, c[1].string, c[2].string, c[3].string)
+        subject = subject[0:2] if subject[1] != "-" else subject[0]
         grades.append({
-            "name": name[0:8],
+            "name": name,
             "date": date,
-            "grade": grade
+            "grade": grade,
+            "subject": subject,
         })
     return grades
 
