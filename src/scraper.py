@@ -47,7 +47,7 @@ def fetch(cached: bool, bot = None):
                 text = fmt(new_entries, new = True)
             )
         return fmt(new_entries, new = True)
-    return fmt(j, new = False)
+    return fmt(new_json, new = False)
 
 # Log into the site and return the a soup of the landing page
 def login(uname: str, passwd: str) -> BeautifulSoup:

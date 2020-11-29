@@ -7,8 +7,6 @@ After=syslog.target network-online.target
 User=web
 Group=web
 Type=simple
-Restart=always
-RestartSec=5s
 ExecStart=/var/www/nesabot/start.sh
 
 [Install]
