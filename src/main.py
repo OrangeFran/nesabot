@@ -53,7 +53,7 @@ if __name__ == "__main__":
     dp.add_handler(CommandHandler("fetch", cmd_fetch))
     updater.start_polling()
     # Start fetching grades in the background
-    thread = threading.Thread(target = bg_fetching, args = (bot, 10, ))
+    thread = threading.Thread(target = bg_fetching, args = (bot, 5, ))
     thread.start()
     thread.join()
 

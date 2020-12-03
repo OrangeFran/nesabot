@@ -26,8 +26,10 @@ remote_work() {
         echo "TOKEN = \"$bot_token\"" >> $creds_file
         echo "MY_CHAT_ID = $chat_id" >> $creds_file
     fi
+
     echo "Building docker file with name 'local/nesabot' ..."
     scripts/build.sh
+
     echo "Starting systemctl service 'nesabot' ..."
     sudo cp "nesabot.service" /etc/systemd/system
     sudo systemctl daemon-reload
