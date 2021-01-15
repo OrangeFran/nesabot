@@ -42,7 +42,7 @@ you and you can directly check the grade from telegram.
 
 Important commands (in the telegram chat):
 
-```
+``` bash
 /grades # Get the stored grades
 /fetch  # Manually get grades from the website
 /help   # A help menu
