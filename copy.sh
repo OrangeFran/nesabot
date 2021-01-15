@@ -1,9 +1,9 @@
 #!/bin/bash
 
-ssh_server="linode"
+ssh_server="linode" # Change to your ssh server
 root_path="/var/www/nesabot"
 
-echo -n "Using the root_path $root_path, continue? (y/n) " && read REPLY
+echo -n "Using the path $root_path, continue? (y/n) " && read REPLY
 if [[ "$REPLY" =~ (y|Y|yes|Yes) ]]; then
     ssh $ssh_server "bash -s" < "$(pwd)/scripts/check_and_stop.sh"
     ssh $ssh_server "bash -s" < "$(pwd)/scripts/set_permissions.sh"
