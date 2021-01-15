@@ -1,6 +1,7 @@
 # Nesabot
 
 Check your grades directly from telegram.
+Tested with the website from the `Kantonsschule am Burggraben`: `https://ksbg.nesa-sg.ch`.
 Easy to use and deploy.
 
 ## Usage
