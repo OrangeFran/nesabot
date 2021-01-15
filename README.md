@@ -25,6 +25,15 @@ docker run nesabot
 
 The scripts are just for debugging.
 
+To transfer the docker image to your server, you can save the file and copy it over the internet:
+``` bash
+docker save -o nesabot.tar nesabot
+scp ...
+ssh ...
+# On you server
+docker load -i nesabot.tar
+```
+
 ## How it works
 
 The bot will log into your nesa account every five minutes and check your grades.
