@@ -1,7 +1,7 @@
 # Nesabot
 
 Check your grades directly from telegram.
-Easy to deploy and easy to use.
+Easy to use and deploy.
 
 ## Usage
 
