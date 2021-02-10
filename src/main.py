@@ -42,7 +42,7 @@ def cmd_fetch(update, context):
     if wrong_user(update): return
     update.message.reply_text(text = fetch(False))
 
-if __name__ == "__main__":
+def main():
     # Start the bot
     bot = Bot(TOKEN)
     updater = Updater(TOKEN, use_context = True)
@@ -57,3 +57,5 @@ if __name__ == "__main__":
     thread.start()
     thread.join()
 
+if __name__ == "__main__":
+    main()

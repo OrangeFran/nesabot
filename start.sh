@@ -2,7 +2,7 @@
 
 # Check if an instance is already running
 if [[ -n "$(docker ps | grep 'local/nesabot')" ]]; then
-    echo "Instance already running ..."
+    echo "Instance already running, kill manually."
     exit 1
 fi
 
