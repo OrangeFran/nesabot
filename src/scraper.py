@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from const import URL
 from creds import UNAME, PASSWD, MY_CHAT_ID
 
-filename = "/nesabot/cache/grades.json"
+filename = "/tmp/nesabot_grades.json"
 
 def read_json():
     with open(filename, "r") as f:
