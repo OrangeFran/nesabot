@@ -7,7 +7,7 @@ After=syslog.target network-online.target
 User=web
 Group=web
 Type=simple
-ExecStart=/var/www/nesabot/start.sh
+ExecStart=docker run nesabot
 
 [Install]
 WantedBy=multi-user.target
