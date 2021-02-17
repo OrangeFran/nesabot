@@ -1,14 +1,11 @@
 FROM python:3
 
-RUN mkdir -p /nesabot
 WORKDIR /nesabot
 
 ADD ./requirements.txt .
+COPY ./src ./src
 
-RUN mkdir cache && touch cache/grades.json 
-COPY ./src src
+RUN touch /tmp/nesabot_grades.json
+RUN pip3 install -r ./requirements.txt
 
-RUN python3 -m venv venv
-RUN venv/bin/pip3 install -r requirements.txt
-
-CMD ["/nesabot/venv/bin/python3", "/nesabot/src/main.py"]
+CMD [ "/nesabot/src/main.py" ]
