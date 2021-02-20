@@ -7,5 +7,6 @@ in
 pkgs.dockerTools.buildImage {
   name = "nesabot";
   created = "now";
-  contents = [ nesabot-app pkgs.bash ];
+  contents = [ nesabot-app ];
+  config.Cmd = [ "nesabot" ];
 }
