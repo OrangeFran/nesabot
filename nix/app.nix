@@ -10,7 +10,7 @@ in
 pkgs.python3.pkgs.buildPythonApplication {
   pname = "nesabot";
   version = "0.1";
-  src = ./.;
+  src = ../.;
   # Use the python packages from the stable channel
   propagatedBuildInputs = with pkgs-stable.python3.pkgs; [
     beautifulsoup4
