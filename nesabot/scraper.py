@@ -4,20 +4,23 @@ Actual code to visit, login and retrive the current grades.
 
 import requests, json
 from bs4 import BeautifulSoup
-from const import URL
-from creds import UNAME, PASSWD, MY_CHAT_ID
+from .const import URL
+from .creds import UNAME, PASSWD, MY_CHAT_ID
 
-filename = "/tmp/nesabot_grades.json"
+filename = "./nesabot_grades.json"
 
 def read_json():
-    with open(filename, "r") as f:
-        txt = f.read()
-        if txt == "":
-            return []
-        return json.loads(txt)
+    try:
+        with open(filename, "r") as f:
+            txt = f.read()
+            if txt == "":
+                return []
+            return json.loads(txt)
+    except FileNotFoundError:
+        return json.loads("[]")
 
 def write_json(j: str):
-    with open(filename, "w") as f:
+    with open(filename, "w+") as f:
         if j != None: json.dump(j, f)
 
 def fmt(json, new: bool) -> str:
@@ -81,6 +84,3 @@ def extract_grades(soup: BeautifulSoup):
             "subject": subject,
         })
     return grades
-
-if __name__ == "__main__":
-    print(extract_grades(login(UNAME, PASSWD)))
