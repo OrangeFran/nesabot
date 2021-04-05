@@ -16,9 +16,10 @@ import threading, time, logging, sys
 from telegram import Bot
 from telegram.ext import Updater, CommandHandler
 
-from .scraper import fetch
-from .creds import TOKEN, MY_CHAT_ID
-from .commands import cmd_help, cmd_grades, cmd_fetch
+from scraper import fetch
+from const import INTERVAL
+from creds import TOKEN, MY_CHAT_ID
+from commands import cmd_help, cmd_grades, cmd_fetch
 
 logger = setup_logger()
 
@@ -43,7 +44,7 @@ def main():
     updater.start_polling()
 
     # Start fetching grades in the background
-    thread = threading.Thread(target = bg_fetching, args = (bot, 5 * 60, ))
+    thread = threading.Thread(target = bg_fetching, args = (bot, INTERVAL * 60, ))
     thread.start()
     thread.join()
 

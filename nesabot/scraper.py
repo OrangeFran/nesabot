@@ -4,8 +4,8 @@ Actual code to visit, login and retrive the current grades.
 
 import requests, json
 from bs4 import BeautifulSoup
-from .const import URL
-from .creds import UNAME, PASSWD, MY_CHAT_ID
+from const import URL
+from creds import UNAME, PASSWD, MY_CHAT_ID
 
 filename = "./nesabot_grades.json"
 

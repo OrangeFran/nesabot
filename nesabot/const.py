@@ -1,3 +1,4 @@
+INTERVAL = 10 # In minutes
 URL = "https://ksbg.nesa-sg.ch/index.php?pageid="
 
 HELP_MSG = '''

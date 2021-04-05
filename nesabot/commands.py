@@ -1,6 +1,6 @@
-from .creds import MY_CHAT_ID
-from .const import HELP_MSG
-from .scraper import fetch
+from creds import MY_CHAT_ID
+from const import HELP_MSG
+from scraper import fetch
 
 # Check if it's actually me that issued the command
 def wrong_user(update) -> bool:
