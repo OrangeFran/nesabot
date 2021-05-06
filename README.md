@@ -1,7 +1,6 @@
 # Nesabot
 
 Check your grades directly from telegram.
-Tested with the website from the `Kantonsschule am Burggraben`: `https://ksbg.nesa-sg.ch`.
 Easy to use and deploy.
 
 ## Usage
@@ -16,34 +15,29 @@ TOKEN = ""                  # str
 MY_CHAT_ID = 1              # int
 ```
 
+## Heroku free tier
+
+With the heroku free tier you can run this bot for free.
+Open an account, download the cli, login and deploy the `worker`.
+
+```
+heroku container:login
+heroku container:push -a nesabot worker
+heroku ps:scale -a nesabot worker=1
+```
+
+## With your own docker instance
+
 Just build the docker image and deploy it.
 This would look something like this:
 
 ``` bash
-docker build -t nesabot -f Dockerfile .
-docker run nesabot 
-```
-
-The scripts are just for debugging.
-
-To transfer the docker image to your server, you can save the file and copy it over the internet:
-``` bash
-docker save -o nesabot.tar.gz nesabot
-docker -H ssh://your@server load -i nesabot.tar.gz
+docker build -t orangefran/nesabot -f Dockerfile .
+docker run -d orangefran/nesabot
 ```
 
 ## How it works
 
-The bot will log into your nesa account every five minutes and check your grades.
+The bot will log into your nesa account every 10 minutes and check your grades.
 It will store them as json for future reference. If new grades were uploaded, the bot will notify
 you and you can directly check them from telegram.
-
-Important commands (in the telegram chat):
-
-``` bash
-/grades # Get the stored grades
-/fetch  # Manually get grades from the website
-/help   # A help menu
-```
-
-I hope it helps you as much as it does me.
