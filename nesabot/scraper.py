@@ -14,7 +14,7 @@ FILENAME = './nesabot_grades.json'
 # Constans from env variables
 dotenv.load_dotenv('.env.local')
 NESA_URL = os.environ['NESA_URL']
-IFTT_URL = os.environ['IFTT_URL']
+IFTTT_URL = os.environ['IFTTT_URL']
 NESA_USERNAME = os.environ['NESA_USERNAME']
 NESA_PASSWORD = os.environ['NESA_PASSWORD']
 

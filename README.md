@@ -1,19 +1,21 @@
 # Nesabot
 
-Check your grades directly from telegram.
-Easy to use and deploy.
+Receive notifications when new grades get upload to the NESA portal.
+Free and easy to use and deploy.
 
-## Usage
+## Setup 
 
-Create the `src/creds.py` file and enter the following information:
+First of all, go to [IFTTT](https://ifttt.com) and create a new applet.
+For the _if_, choose `webhook` and for the _then that_, choose `notification`.
 
-``` python
-UNAME = ""                  # str
-PASSWD = ""                 # str
-
-TOKEN = ""                  # str
-MY_CHAT_ID = 1              # int
+After that, copy the webhook url and run the following command in your terminal:
 ```
+cp .env.template .env.local
+```
+
+Then open the new file and fill in you webhook url, your username and your password.
+Now you are ready to deploy the code. Follow the steps below to continue. You can choose between the
+[Heroku](https://heroku.com) free tier and your own docker daemon if you have one.
 
 ## Heroku free tier
 
@@ -39,5 +41,5 @@ docker run -d orangefran/nesabot
 ## How it works
 
 The bot will log into your nesa account every 10 minutes and check your grades.
-It will store them as json for future reference. If new grades were uploaded, the bot will notify
-you and you can directly check them from telegram.
+It will store them as json for future reference. If new grades were uploaded, it will notify
+you over [IFTTT](https://ifttt.com).
