@@ -52,7 +52,7 @@ def fetch() -> bool:
         return notif(new_entries)
     return True
 
-# Send a post request to the iftt endpoint
+# Send a post request to the ifttt endpoint
 # and check if it was successful.
 def notif(new) -> bool:
     for grade in new: 
@@ -62,7 +62,7 @@ def notif(new) -> bool:
             'value3': grade['subject'],
         }
         resp = requests.post(
-            IFTT_URL,
+            IFTTT_URL,
             headers={'Content-Type': 'application/json'},
             data=json.dumps(payload)
         )
