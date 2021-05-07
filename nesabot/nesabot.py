@@ -6,47 +6,28 @@ and displays them in a nice way to me.
 '''
 
 import logging
-
-def setup_logger() -> logging.Logger:
-    f = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-    logging.basicConfig(format = f, level = logging.INFO)
-    return logging.getLogger(__name__)
-
-import threading, time, logging, sys
-from telegram import Bot
-from telegram.ext import Updater, CommandHandler
-
-from scraper import fetch
-from const import INTERVAL
-from creds import TOKEN, MY_CHAT_ID
-from commands import cmd_help, cmd_grades, cmd_fetch
-
+from log import setup_logger
 logger = setup_logger()
 
+import threading, time, os, dotenv
+from scraper import fetch
+
+# Constants from env variables
+dotenv.load_dotenv('.env.local')
+INTERVAL = int(os.environ['CHECK_INTERVAL'])
+
 # Background thread to fetch grades every x minutes
-def bg_fetching(bot, wait):
-    logger.log(msg = "Fetching every {} seconds!".format(wait), level = logging.INFO)
+def main():
+    wait = INTERVAL * 60
+    logger.log(msg='[=] Fetching every {} seconds!'.format(wait), level=logging.INFO)
     while True:
-        _ = fetch(False, bot)
-        logger.log(msg = "Fetched grades!", level = logging.INFO)
+        # Check if the process failed
+        if fetch():
+            logger.log(msg='[+] Fetched grades!', level=logging.INFO)
+        else: 
+            logger.log(msg='[x] Something went wrong, retrying ...', level=logging.WARNING)
+            continue
         time.sleep(wait)
 
-def main():
-    # Start the bot
-    bot = Bot(TOKEN)
-    updater = Updater(TOKEN, use_context = True)
-
-    dp = updater.dispatcher
-    dp.add_handler(CommandHandler("help", cmd_help))
-    dp.add_handler(CommandHandler("start", cmd_help))
-    dp.add_handler(CommandHandler("grades", cmd_grades))
-    dp.add_handler(CommandHandler("fetch", cmd_fetch))
-    updater.start_polling()
-
-    # Start fetching grades in the background
-    thread = threading.Thread(target = bg_fetching, args = (bot, INTERVAL * 60, ))
-    thread.start()
-    thread.join()
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

@@ -7,9 +7,9 @@
 
 pkgs.mkShell {
   buildInputs = with pkgs.python3.pkgs; [
+    python-dotenv
     beautifulsoup4
     requests
-    python-telegram-bot
   ];
 }
 

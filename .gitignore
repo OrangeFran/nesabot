@@ -3,5 +3,6 @@ cache
 __pycache__
 venv
 
-# Local credentials
+# Local environment files 
 creds.py
+.env.local

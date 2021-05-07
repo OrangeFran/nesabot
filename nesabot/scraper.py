@@ -2,85 +2,103 @@
 Actual code to visit, login and retrive the current grades.
 '''
 
-import requests, json
-from bs4 import BeautifulSoup
-from const import URL
-from creds import UNAME, PASSWD, MY_CHAT_ID
+import logging
+from log import setup_logger
+logger = setup_logger()
 
-filename = "./nesabot_grades.json"
+import requests, json, os, dotenv
+from bs4 import BeautifulSoup
+
+FILENAME = './nesabot_grades.json'
+
+# Constans from env variables
+dotenv.load_dotenv('.env.local')
+NESA_URL = os.environ['NESA_URL']
+IFTT_URL = os.environ['IFTT_URL']
+NESA_USERNAME = os.environ['NESA_USERNAME']
+NESA_PASSWORD = os.environ['NESA_PASSWORD']
 
 def read_json():
     try:
-        with open(filename, "r") as f:
+        with open(FILENAME, 'r') as f:
             txt = f.read()
-            if txt == "":
+            if txt == '':
                 return []
             return json.loads(txt)
     except FileNotFoundError:
-        return json.loads("[]")
+        return json.loads('[]')
 
 def write_json(j: str):
-    with open(filename, "w+") as f:
+    with open(FILENAME, 'w+') as f:
         if j != None: json.dump(j, f)
 
-def fmt(json, new: bool) -> str:
-    output = "New grades ... 😄\n" if new else ""
-    for g in json:
-        output += "{} ({}) at {}: \t{}\n".format(g["name"], g["subject"], g["date"], g["grade"])
-    return output if output != "" else "Nothing"
-
-# Data will be stored as json
-def fetch(cached: bool, bot = None):
-    # Try to load "cached" json if avaible
+# Fetch new grades and compare them to 
+# the cached ones. Send a new notification if there
+# was a change.
+def fetch() -> bool:
+    # Try to load 'cached' json if avaible
     cached_json = read_json()
-    if cached:
-        return fmt(cached_json, new = False)
-    # Fetch new grades (if avaible) and write to cache for future ref
-    new_json = extract_grades(login(UNAME, PASSWD))
+    # Fetch new grades 
+    new_json = extract_grades(login(NESA_USERNAME, NESA_PASSWORD))
+    # Write to cache for future reference
     write_json(new_json)
-    # Compare with old one
+    # Compare with old one and send a notification
+    # if they aren't similair
     if len(cached_json) != len(new_json):
         new_entries = []
         for c in new_json:
             if c not in cached_json:
                 new_entries.append(c)
-        if bot != None:
-            bot.send_message(
-                chat_id = MY_CHAT_ID,
-                text = fmt(new_entries, new = True)
-            )
-        return fmt(new_entries, new = True)
-    return fmt(new_json, new = False)
+        return notif(new_entries)
+    return True
+
+# Send a post request to the iftt endpoint
+# and check if it was successful.
+def notif(new) -> bool:
+    for grade in new: 
+        payload = {
+            'value1': grade['name'],
+            'value2': grade['grade'],
+            'value3': grade['subject'],
+        }
+        resp = requests.post(
+            IFTT_URL,
+            headers={'Content-Type': 'application/json'},
+            data=json.dumps(payload)
+        )
+        logger.log(msg='[+] Sent notification!', level=logging.INFO)
+        if resp.status_code in [400, 404]:
+            return False
+    return True
 
 # Log into the site and return the a soup of the landing page
 def login(uname: str, passwd: str) -> BeautifulSoup:
     with requests.Session() as session:
-        soup = BeautifulSoup(session.get(URL).text, features = "html.parser")
+        soup = BeautifulSoup(session.get(NESA_URL).text, features = 'html.parser')
         # Find post url + dynamic loginhash
-        loginhash = soup.find("input", attrs = {"name": "loginhash"})["value"]
-        action = soup.find("form", attrs = {"method": "post"})["action"]
-
-        post = "{}/{}".format(URL, action)
+        loginhash = soup.find('input', attrs = {'name': 'loginhash'})['value']
+        action = soup.find('form', attrs = {'method': 'post'})['action']
+        post = '{}/{}'.format(NESA_URL, action)
         payload = {
             'login': uname, 
             'passwort': passwd,
             'loginhash': loginhash
         }
         p = session.post(post, data = payload)
-        return BeautifulSoup(p.text, features = "html.parser")
+        return BeautifulSoup(p.text, features = 'html.parser')
 
 # Extract grades from landing page
 # Grades are stored in tr.td elements
 def extract_grades(soup: BeautifulSoup):
     grades = []
-    for tr in soup.select("tr.mdl-table--row-dense")[8:]:
-        c = list(filter(lambda x: x != "\n", tr.contents))
+    for tr in soup.select('tr.mdl-table--row-dense')[8:]:
+        c = list(filter(lambda x: x != '\n', tr.contents))
         subject, name, date, grade = (c[0].string, c[1].string, c[2].string, c[3].string)
-        subject = subject[0:2] if subject[1] != "-" else subject[0]
+        subject = subject[0:2] if subject[1] != '-' else subject[0]
         grades.append({
-            "name": name,
-            "date": date,
-            "grade": grade,
-            "subject": subject,
+            'name': name,
+            'date': date,
+            'grade': grade,
+            'subject': subject,
         })
     return grades
