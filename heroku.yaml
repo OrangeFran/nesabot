@@ -1,4 +1,4 @@
 # A simple worker process
 build:
-    docker:
-        worker: Dockerfile
+  docker:
+    worker: Dockerfile
