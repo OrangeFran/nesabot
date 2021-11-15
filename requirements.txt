@@ -8,7 +8,7 @@ idna==2.10
 jedi==0.17.2
 packaging==20.4
 parso==0.7.1
-pip==21.0.1
+pip==21.1
 pyasn1==0.4.8
 pycparser==2.20
 pyOpenSSL==19.1.0
